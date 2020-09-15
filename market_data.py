@@ -14,13 +14,18 @@ def get_bars(symbols, day_count=0, week_count=0, month_count=0, year_count=0):
         start_raw = (current_raw - relativedelta(days=day_count, weeks=week_count, months=month_count, years=year_count))
         start_round = pd.to_datetime(start_raw).round('1s')
         start = start_round.isoformat() + '-04:00'
-        barset = api.get_barset(symbols, 'day', after=start)
-        aapl_bars = barset['AAPL']
+        barset = api.get_barset(','.join(symbols), 'day', after=start)
 
-        print(aapl_bars)
+        closing_prices = []
+        for symbol in symbols:
+            closing_prices.append(barset[symbol][-1].c)
+            #print(barset[symbol][0].__dict__['_raw'])
+        data = {'name': symbols, 'price': closing_prices}
+        df_marks = pd.DataFrame(data)
+        print(df_marks)
 
         time.sleep(100000)
 
 
-my_symbols = 'AAPL'
-get_bars(symbols=my_symbols, day_count=2)
+my_symbols = ['AAPL', 'AMZN']
+get_bars(symbols=my_symbols, day_count=10)
