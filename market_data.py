@@ -30,17 +30,27 @@ def get_current_prices(symbols, barset):
             closing_prices.append(x[-1].c)
     return closing_prices
 
+def get_volumes(symbols, barset):
+    volumes = []
+    for symbol in symbols:
+        x = barset[symbol]
+        if len(x) == 0:
+            volumes.append('None')
+        else:
+            volumes.append(x[-1].v)
+    return volumes
+
 
 def create_df(symbols):
-    closing_prices=[]
     bars = {}
     symbols_subs = [symbols[x:x + 100] for x in range(0, len(symbols), 100)]
     for sub in symbols_subs:
         barset = get_bars(sub, day_count=1)
         for i in barset:
             bars[i] = barset[i]
-    closing_prices.extend(get_current_prices(symbols, bars))
-    data = {'Name': symbols, 'Price': closing_prices}
+    closing_prices = get_current_prices(symbols, bars)
+    volumes = get_volumes(symbols, bars)
+    data = {'Name': symbols, 'Price': closing_prices, 'Volumes': volumes}
     df = pd.DataFrame(data)
     df.to_csv(r'export_dataframe.csv', index=False, header=True)
     return df
