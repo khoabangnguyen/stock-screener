@@ -62,6 +62,30 @@ def get_change(symbols, barset):
             percentage_changes.append("{:.2%}".format((end - start)/start))
     return percentage_changes
 
+def get_screener_data(symbols, barset):
+    current_prices = []
+    changes = []
+    percent_changes = []
+    volumes = []
+    times = []
+    for symbol in symbols:
+        x = barset[symbol]
+        if len(x) == 0:
+            current_prices.append('None')
+            changes.append('None')
+            percent_changes.append('None')
+            volumes.append('None')
+            times.append('None')
+        else:
+            current = x[-1].c
+            start = x[0].o
+            current_prices.append(current)
+            changes.append(current - start)
+            percent_changes.append("{:.2%}".format((current - start) / start))
+            volumes.append(x[-1].v)
+            times.append(x[-1].t)
+    data = {'Name': symbols, 'Time': times, 'Price': current_prices, 'Change': changes, '% Change': percent_changes, 'Volumes': volumes, 'Sector': sectors }
+    return data
 
 def create_df(symbols):
     bars = {}
@@ -70,12 +94,7 @@ def create_df(symbols):
         barset = get_bars(sub, day_count=7)
         for i in barset:
             bars[i] = barset[i]
-    closing_prices = get_current_prices(symbols, bars)
-    percent_changes = get_change(symbols, bars)
-    volumes = get_volumes(symbols, bars)
-    times = get_times(symbols, bars)
-    data = {'Name': symbols, 'Sector': sectors, 'Time': times, 'Price': closing_prices, '% Change': percent_changes, 'Volumes': volumes}
-    df = pd.DataFrame(data)
+    df = pd.DataFrame(get_screener_data(symbols, bars))
     df.to_csv(r'export_dataframe.csv', index=False, header=True)
     return df
 
