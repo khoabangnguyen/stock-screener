@@ -30,6 +30,7 @@ def get_current_prices(symbols, barset):
             closing_prices.append(x[-1].c)
     return closing_prices
 
+
 def get_volumes(symbols, barset):
     volumes = []
     for symbol in symbols:
@@ -40,6 +41,7 @@ def get_volumes(symbols, barset):
             volumes.append(x[-1].v)
     return volumes
 
+
 def get_times(symbols, barset):
     times = []
     for symbol in symbols:
@@ -49,6 +51,7 @@ def get_times(symbols, barset):
         else:
             times.append(x[-1].t)
     return times
+
 
 def get_change(symbols, barset):
     percentage_changes = []
