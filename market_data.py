@@ -49,7 +49,6 @@ def get_eps(symbols):
 
     eps_list = []
 
-    driver_path = r'C:\Users\Nolan\Desktop\Alpaca\chromedriver_win32\chromedriver'
     driver = webdriver.Chrome(executable_path=driver_path)
 
     base_url = 'https://finance.yahoo.com/quote/'
