@@ -130,3 +130,5 @@ dmypy.json
 
 config.py
 .csv
+/google_credentials.json
+/export_dataframe.csv

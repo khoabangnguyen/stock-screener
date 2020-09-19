@@ -57,7 +57,7 @@ def get_change(symbols, barset):
         if len(x) == 0:
             percentage_changes.append('None')
         else:
-            end = x[0].c
+            end = x[-1].c
             start = x[0].o
             percentage_changes.append("{:.2%}".format((end - start)/start))
     return percentage_changes
@@ -80,5 +80,5 @@ def create_df(symbols):
     return df
 
 
-create_df(sp500_symbols)
+#create_df(sp500_symbols)
 
