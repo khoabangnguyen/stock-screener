@@ -20,7 +20,7 @@ def plot_stock(symbol, barset):
     for bar in bars:
         times.append(bar.t)
         prices.append(bar.c)
-    plt.plot(times, prices)
+    return plt.plot(times, prices)
 
 barset = get_historical_prices(s500)
 plot_stock('AAPL', barset)

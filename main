@@ -1,0 +1,21 @@
+from flask import Flask, render_template
+import tablib
+import os
+import pandas as pd
+from market_data import *
+from datetime import datetime
+app = Flask (__name__)
+
+#fun var
+
+dataset = tablib.Dataset()
+with open(os.path.join(os.path.dirname(__file__), 'export_dataframe.csv')) as f:
+    dataset.csv = f.read()
+
+
+@app.route("/")
+def index():
+    return create_df(sp500_symbols).to_html()
+
+if __name__ == "__main__":
+    app.run()
