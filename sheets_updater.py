@@ -20,4 +20,4 @@ while True:
     now = datetime.now()
     current_time = now.strftime("%d/%m/%Y %H:%M:%S")
     print("Updated at: ", current_time)
-    time.sleep(5)
+    time.sleep(30)
