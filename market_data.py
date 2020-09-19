@@ -22,7 +22,6 @@ def get_bars(symbols, time_frame='day', day_count=0, week_count=0, month_count=0
 
 def get_current_prices(symbols, barset):
     closing_prices = []
-    count = 0
     for symbol in symbols:
         x = barset[symbol]
         if len(x) == 0:
@@ -34,10 +33,13 @@ def get_current_prices(symbols, barset):
 
 def create_df(symbols):
     closing_prices=[]
+    bars = {}
     symbols_subs = [symbols[x:x + 100] for x in range(0, len(symbols), 100)]
     for sub in symbols_subs:
         barset = get_bars(sub, day_count=1)
-        closing_prices.extend(get_current_prices(sub, barset))
+        for i in barset:
+            bars[i] = barset[i]
+    closing_prices.extend(get_current_prices(symbols, bars))
     data = {'Name': symbols, 'Price': closing_prices}
     df = pd.DataFrame(data)
     df.to_csv(r'export_dataframe.csv', index=False, header=True)
