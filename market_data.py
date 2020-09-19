@@ -20,28 +20,29 @@ def get_bars(symbols, time_frame='day', day_count=0, week_count=0, month_count=0
         return barset
 
 
-def get_current_prices(symbols):
+def get_current_prices(symbols, barset):
     closing_prices = []
-    symbols_subs = [symbols[x:x+100] for x in range(0, len(symbols), 100)]
     count = 0
-    for sub in symbols_subs:
-        barset = get_bars(sub, day_count=1)
-        for symbol in sub:
-            x = barset[symbol]
-            if len(x) == 0:
-                #print(symbol)
-                closing_prices.append('None')
-            else:
-                closing_prices.append(x[-1].c)
+    for symbol in symbols:
+        x = barset[symbol]
+        if len(x) == 0:
+            closing_prices.append('None')
+        else:
+            closing_prices.append(x[-1].c)
     return closing_prices
 
 
 def create_df(symbols):
-    data = {'Name': symbols, 'Price': get_current_prices(symbols)}
+    closing_prices=[]
+    symbols_subs = [symbols[x:x + 100] for x in range(0, len(symbols), 100)]
+    for sub in symbols_subs:
+        barset = get_bars(sub, day_count=1)
+        closing_prices.extend(get_current_prices(sub, barset))
+    data = {'Name': symbols, 'Price': closing_prices}
     df = pd.DataFrame(data)
     df.to_csv(r'export_dataframe.csv', index=False, header=True)
     return df
 
 
-print(create_df(sp500_symbols))
+create_df(sp500_symbols)
 
