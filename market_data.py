@@ -4,7 +4,7 @@ import pandas as pd
 import datetime
 import time
 from dateutil.relativedelta import relativedelta
-from get_s_p_500 import symbols as sp500_symbols
+from get_s_p_500 import symbols as sp500_symbols, sectors
 
 api = trade_api.REST(api_key_id, secret_key, base_url='https://paper-api.alpaca.markets/')
 
@@ -50,7 +50,7 @@ def create_df(symbols):
             bars[i] = barset[i]
     closing_prices = get_current_prices(symbols, bars)
     volumes = get_volumes(symbols, bars)
-    data = {'Name': symbols, 'Price': closing_prices, 'Volumes': volumes}
+    data = {'Name': symbols, 'Sector': sectors, 'Price': closing_prices, 'Volumes': volumes}
     df = pd.DataFrame(data)
     df.to_csv(r'export_dataframe.csv', index=False, header=True)
     return df
