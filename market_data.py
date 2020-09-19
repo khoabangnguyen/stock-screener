@@ -5,6 +5,9 @@ import datetime
 import time
 from dateutil.relativedelta import relativedelta
 from get_s_p_500 import symbols as sp500_symbols, sectors
+from selenium import webdriver
+import time
+import lxml
 
 api = trade_api.REST(api_key_id, secret_key, base_url='https://paper-api.alpaca.markets/')
 
@@ -42,6 +45,25 @@ def get_volumes(symbols, barset):
     return volumes
 
 
+def get_eps(symbols):
+
+    eps_list = []
+
+    driver_path = r'C:\Users\Nolan\Desktop\Alpaca\chromedriver_win32\chromedriver'
+    driver = webdriver.Chrome(executable_path=driver_path)
+
+    base_url = 'https://finance.yahoo.com/quote/'
+
+    for i in symbols:
+        url = base_url + i
+        driver.get(url)
+        time.sleep(5)
+        eps = driver.find_element_by_xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[4]/td[2]/span')
+        eps_list.append(eps)
+
+    driver.quit()
+
+
 def get_times(symbols, barset):
     times = []
     for symbol in symbols:
@@ -64,6 +86,7 @@ def get_change(symbols, barset):
             start = x[0].o
             percentage_changes.append("{:.2%}".format((end - start)/start))
     return percentage_changes
+
 
 def get_screener_data(symbols, barset):
     current_prices = []
@@ -89,6 +112,7 @@ def get_screener_data(symbols, barset):
             times.append(x[-1].t)
     data = {'Name': symbols, 'Time': times, 'Price': current_prices, 'Change': changes, '% Change': percent_changes, 'Volumes': volumes, 'Sector': sectors }
     return data
+
 
 def create_df(symbols):
     bars = {}
