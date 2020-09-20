@@ -25,21 +25,20 @@ driver_path = r'YOUR-FILE-PATH-TO-CHROMEDRIVER'
 ```
 #### market_data.py
 
-Timestamps, prices, changes (absolute and percent), and volume (EPS, P/E, and market cap coming soon)
+Timestamps, prices, changes (absolute and percent), and volume via Alpaca's Stock Trading API. EPS, P/E, and market cap coming soon.
 
 #### get_s_p_500.py
 
-Tickers and sectors
+Tickers and sectors via pandas.
 
 #### plotter.py
 
-Historical price data over an adjustable period
+Historical price data over an adjustable period via matplotlib.
 
 #### sheets_updater.py
 
-Updates spreadsheet using Google Sheets API
+Updates spreadsheet using Google Sheets API.
 
 #### main
 
-Flask server
-
+Flask server.
