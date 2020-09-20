@@ -58,7 +58,7 @@ def get_eps(symbols):
         driver.get(url)
         time.sleep(5)
         eps = driver.find_element_by_xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[4]/td[2]/span')
-        eps_list.append(eps)
+        eps_list.append(eps.text)
 
     driver.quit()
 
