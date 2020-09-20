@@ -1,5 +1,7 @@
 from market_data import get_bars
 from get_s_p_500 import symbols as s500
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
@@ -20,7 +22,9 @@ def plot_stock(symbol, barset):
     for bar in bars:
         times.append(bar.t)
         prices.append(bar.c)
-    return plt.plot(times, prices)
+    plt.plot(times, prices)
+    plt.savefig("static/" + symbol)
+    plt.clf()
 
-barset = get_historical_prices(s500)
-plot_stock('AAPL', barset)
+#sp500barset = get_historical_prices(s500)
+# plot_stock('AAPL', sp500barset)
