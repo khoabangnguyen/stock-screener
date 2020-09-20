@@ -45,20 +45,30 @@ def get_volumes(symbols, barset):
     return volumes
 
 
-def get_eps(symbols):
+def yahoo(symbols):
 
     eps_list = []
+    cap_list = []
 
     driver = webdriver.Chrome(executable_path=driver_path)
 
     base_url = 'https://finance.yahoo.com/quote/'
 
+    eps_xpath = '//*[@id="quote-summary"]/div[2]/table/tbody/tr[4]/td[2]/span'
+    cap_xpath = '//*[@id="quote-summary"]/div[2]/table/tbody/tr[1]/td[2]/span'
+
     for i in symbols:
         url = base_url + i
         driver.get(url)
         time.sleep(5)
-        eps = driver.find_element_by_xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[4]/td[2]/span')
-        eps_list.append(eps)
+        try:
+            eps = driver.find_element_by_xpath(eps_xpath)
+            cap = driver.find_element_by_xpath(cap_xpath)
+            eps_list.append(eps.text)
+            cap_list.append(cap)
+        except:
+            eps_list.append('N/A')
+            cap_list.append('N/A')
 
     driver.quit()
 
@@ -93,6 +103,7 @@ def get_screener_data(symbols, barset):
     percent_changes = []
     volumes = []
     times = []
+
     for symbol in symbols:
         x = barset[symbol]
         if len(x) == 0:
@@ -109,7 +120,8 @@ def get_screener_data(symbols, barset):
             percent_changes.append("{:.2%}".format((current - start) / start))
             volumes.append(x[-1].v)
             times.append(x[-1].t)
-    data = {'Name': symbols, 'Time': times, 'Price': current_prices, 'Change': changes, '% Change': percent_changes, 'Volumes': volumes, 'Sector': sectors }
+    data = {'Ticker': symbols, 'Time': times, 'Price (USD)': current_prices, 'Change ($)': changes,
+            'Change (%)': percent_changes, 'Volume': volumes, 'Sector': sectors}
     return data
 
 
